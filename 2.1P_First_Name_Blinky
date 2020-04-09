@@ -1,0 +1,44 @@
+int led = D7;
+
+void setup() {
+
+pinModr(led,OUTPUT);
+}
+
+int unit = 100;
+
+void dot() { digitalWrite(led1,HIGH); digitalWrite(led2,HIGH); delay(unit); digitalWrite(led1,LOW); digitalWrite(led2,LOW); delay(unit); } //create a dot partern
+
+void dash() { digitalWrite(led1,HIGH); digitalWrite(led2,HIGH); delay(unit*3); digitalWrite(led1,LOW); digitalWrite(led2,LOW); delay(unit); } //create a dash parten
+
+void new_char() { delay(unit*2); } //make spacing between each character
+
+void new_word() { delay(unit*6); } //make a spacing after each word
+
+void loop() {
+
+//k
+dash();
+dot();
+dash();
+new_char();
+
+//h
+dot();
+dot();
+dot();
+dot();
+new_char();
+
+//o
+dash();
+dot();
+new_char();
+
+//a
+dot();
+dash();
+new_char;
+
+new_word();
+}

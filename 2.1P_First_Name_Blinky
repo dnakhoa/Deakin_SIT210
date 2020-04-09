@@ -7,9 +7,9 @@ pinModr(led,OUTPUT);
 
 int unit = 100;
 
-void dot() { digitalWrite(led1,HIGH); digitalWrite(led2,HIGH); delay(unit); digitalWrite(led1,LOW); digitalWrite(led2,LOW); delay(unit); } //create a dot partern
+void dot() { digitalWrite(led,HIGH);  delay(unit); digitalWrite(led,LOW);  delay(unit); } //create a dot partern
 
-void dash() { digitalWrite(led1,HIGH); digitalWrite(led2,HIGH); delay(unit*3); digitalWrite(led1,LOW); digitalWrite(led2,LOW); delay(unit); } //create a dash parten
+void dash() { digitalWrite(led,HIGH);  delay(unit*3); digitalWrite(led,LOW);  delay(unit); } //create a dash parten
 
 void new_char() { delay(unit*2); } //make spacing between each character
 

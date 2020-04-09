@@ -2,7 +2,7 @@ int led = D7;
 
 void setup() {
 
-pinModr(led,OUTPUT);
+pinMode(led,OUTPUT);
 }
 
 int unit = 100;

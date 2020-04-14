@@ -1,0 +1,31 @@
+int S1 = A0;
+
+int anaVal;
+
+char light[30]; 
+
+void setup() {
+
+Serial.begin();
+
+Particle.variable("analogvalue", anaVal);
+
+Particle.variable("light", light);
+
+Particle.subscribe("hook-response/light", myHandler, MY_DEVICES);
+} 
+void myHandler(const char *event, const char *data) {
+//null handler
+}
+
+void loop() {
+
+anaVal = analogRead(photosensor);
+
+sprintf(light,"%d", anaVal);
+
+Particle.publish("light", light, PRIVATE);
+
+delay(3000);
+}
+

@@ -20,7 +20,7 @@ void myHandler(const char *event, const char *data) {
 
 void loop() {
 
-anaVal = analogRead(photosensor);
+anaVal = analogRead(S1);
 
 sprintf(light,"%d", anaVal);
 

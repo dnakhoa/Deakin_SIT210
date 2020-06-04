@@ -1,0 +1,54 @@
+int redLED = D6;
+int greenLED = D5;
+int blueLED = D4;
+
+
+void setup() {
+  
+  pinMode(redLED, OUTPUT);
+  pinMode(greenLED, OUTPUT);
+  pinMode(blueLED, OUTPUT);
+  
+
+  digitalWrite(redLED, LOW);
+  digitalWrite(greenLED, LOW);
+  digitalWrite(blueLED, LOW);
+  
+  // We are going to declare a Particle.function so that we can turn the external LED on and off from the cloud.
+  Particle.function("led",ledToggle);
+  // The above line is saying that when we ask the cloud for the function "led", it will employ the function ledToggle() below
+}
+
+void loop() {
+
+}  
+
+int ledToggle(String command) {
+
+    if (command=="ron") {
+        digitalWrite(redLED,HIGH);
+        return 1;
+    }
+    else if (command=="roff") {
+        digitalWrite(redLED,LOW);
+        return 1;
+    }
+    else if (command=="gon") {
+        digitalWrite(greenLED,HIGH);
+        return 1;
+    }
+    else if (command=="goff") {
+        digitalWrite(greenLED,LOW);
+        return 1;
+    }
+    else if (command=="bon") {
+        digitalWrite(blueLED,HIGH);
+        return 1;
+    }
+    else if (command=="boff") {
+        digitalWrite(blueLED,LOW);
+        return 1;
+    }
+    else return -1;
+    
+}

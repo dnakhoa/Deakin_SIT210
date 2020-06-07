@@ -1,55 +1,63 @@
-import RPi.GPIO as GPIO 
+import RPi.GPIO as GPIO
 import time
-from time import sleep
-from gpiozero import PWMLED
+ 
+#GPIO Mode (BOARD / BCM)
+GPIO.setmode(GPIO.BCM)
+ 
+#set GPIO Pins
+GPIO_TRIGGER = 18
+GPIO_ECHO = 24
+LED = 21
 
-GPIO.setwarnings(False)
+#set GPIO direction (IN / OUT)
+GPIO.setup(GPIO_TRIGGER, GPIO.OUT)
+GPIO.setup(GPIO_ECHO, GPIO.IN)
+GPIO.setup(LED, GPIO.OUT)
 
-from gpiozero import PWMLED 
-from time import sleep
+P = GPIO.PWM(LED, 100)
+P.start(0)
 
-led = PWMLED(21)
-
-def ping(): 
-    """Get reading from HC-SR04""" 
-    GPIO.setmode(GPIO.BCM)
-
-    TRIG = 23 
-    ECHO = 18
-     
-    GPIO.setup(TRIG,GPIO.OUT)
-    GPIO.setup(ECHO,GPIO.IN)
-
-    GPIO.output(TRIG, False)
-    time.sleep(1)
-
-    GPIO.output(TRIG, True)
+def distance():
+    # set Trigger to HIGH
+    GPIO.output(GPIO_TRIGGER, True)
+ 
+    # set Trigger after 0.01ms to LOW
     time.sleep(0.00001)
-    GPIO.output(TRIG, False)
+    GPIO.output(GPIO_TRIGGER, False)
+ 
+    StartTime = time.time()
+    StopTime = time.time()
+ 
+    # save StartTime
+    while GPIO.input(GPIO_ECHO) == 0:
+        StartTime = time.time()
+ 
+    # save time of arrival
+    while GPIO.input(GPIO_ECHO) == 1:
+        StopTime = time.time()
+ 
+    # time difference between start and arrival
+    TimeElapsed = StopTime - StartTime
+    # multiply with the sonic speed (34300 cm/s)
+    # and divide by 2, because there and back
+    distance = (TimeElapsed * 34300) / 2
+ 
+    return distance
+ 
+if __name__ == '__main__':
+    try:
+        while True:
+            dist = distance()
+            if dist < 10:
+                P.ChangeDutyCycle(100-dist*10)
+            else:
+                P.ChangeDutyCycle(0)
+                
+            print ("Measured Distance = %.1f cm" % dist)
+            time.sleep(2)
+ 
+        # Reset by pressing CTRL + C
+    except KeyboardInterrupt:
+        print("Measurement stopped by User")
+        GPIO.cleanup()
 
-    while GPIO.input(ECHO)==0:
-      pulse_start = time.time()
-      
-    while GPIO.input(ECHO)==1:
-      pulse_end = time.time()
-
-    pulse_duration = pulse_end - pulse_start
-     
-    distance = pulse_duration * 17150
-     
-    distance = round(distance, 2)
-    distance_in_m = distance / 100
-    distance_in_m = round(distance_in_m , 2)
-    print("Distance: "+ str(distance) + "cm")
-    print("Distance: "+ str(distance_in_m) + "m")
-    led.pulse()
-    if distance_in_m < 1:
-        led.value = 1 - distance_in_m
-    else:
-        led.value = 0
-        
-    sleep(0.001)
-    print(" Reading distance " )
-
-while True:
-    ping()
